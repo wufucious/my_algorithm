@@ -21,7 +21,12 @@ int main(int argc, char *argv[])
     SWAP(a,b);
     printf("a = %d b = %d\n",a,b);
 
-    if(TWO(a)) printf("a is 2");
-    if(TWO(b)) printf("b is 2");
+    if(TWO(a)) printf("a is 2 \n");
+    if(TWO(b)) printf("b is 2 \n");
+
+    unsigned char e = 0xA5;
+    unsigned char f = ~e >> 5;
+    printf("f=%d \n",f);
+
     return 0;
 }

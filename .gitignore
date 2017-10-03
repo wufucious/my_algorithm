@@ -50,6 +50,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-/build-search_and_sort-Desktop_Qt_5_8_0_MinGW_32bit-Default
+/build-*
+/misc/build-*
 *.user
 *.txt

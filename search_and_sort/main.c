@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
 // A utility function to swap two elements
 void swap(int* a, int* b)
 {
@@ -50,42 +52,100 @@ void quickSort(int arr[], int low, int high)
     }
 }
 
+int select(int arr[], int low, int high, int sel)
+{
+    int ret = -1;
+
+    if (low < high)
+    {
+        int pi = partition(arr, low, high);
+        if(sel == pi){
+            return arr[pi];
+        }else if (sel < pi) {
+            ret = select(arr, low, pi - 1, sel);
+        }else{
+            ret = select(arr, pi + 1, high, sel);
+        }
+    }
+
+    return ret;
+}
+
+void merge(int *a, int low, int middle, int high)
+{
+    int n1 = middle - low + 1;
+    int n2 = high - middle;
+    int l[n1+1];
+    int r[n2+1];
+
+    for(int i=0; i < n1; i++){
+        l[i] = a[i+low];
+    }
+    l[n1] = INT_MAX;
+
+    for(int i=0; i < n2; i++){
+        r[i] = a[i+middle+1];
+    }
+    r[n2] = INT_MAX;
+
+    int j=0;
+    int k=0;
+    for(int i=low; i< high+1; i++){
+        if(l[j] < r[k]){
+            a[i] = l[j];
+            j++;
+        }else{
+            a[i] = r[k];
+            k++;
+        }
+    }
+}
+
+void mergeSort(int *a, int low, int high)
+{
+    if(low < high){
+        int middle = (low+high)/2;
+        mergeSort(a, low,      middle);
+        mergeSort(a, middle+1, high);
+        merge(a, low, middle, high);
+    }
+}
+
 int insertSort(int *a, int n)
 {
     int i,j;
     for(i=1; i < n; i++){
-        for(j=0; j < i; j++)
-            if(a[j]>a[i]){
-               int tmp = a[i];
-               int p = i;
-               while (p != j) {
-                   a[p] = a[p-1];
-                   p--;
-               }
-               a[j] = tmp;
-            }
+        j = i-1;
+        int key = a[i];
+        while (j>=0&&a[j]>key) {
+            a[j+1] = a [j];
+            j--;
+        }
+        a[j+1] = key;
     }
     return 0;
 }
 
 int main(int argc, char *argv[])
 {
-    int a[5] = {5,4,3,2,1};
+    int a[10] = {5,4,10,2,1,7,8,9,6,3};
 
     printf("The unsorted arrary is");
-    for(int n=0; n < 5; n++){
+    for(int n=0; n < 10; n++){
         printf("%d ", a[n]);
     }
     printf("\n");
 
-//    insertSort(a,5);
-    quickSort(a,0,4);
-
+//    insertSort(a,10);
+//    quickSort(a,0,9);
+//    mergeSort(a,0,9);
 
     printf("The sorted arrary is");
-    for(int n=0; n < 5; n++){
+    for(int n=0; n < 10; n++){
         printf("%d ", a[n]);
     }
+
+    printf("The selected %d number is %d",6,select(a,0,9,9));
     printf("\n");
     return 0;
 }
